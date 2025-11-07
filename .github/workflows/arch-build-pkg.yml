@@ -1,0 +1,57 @@
+name: Build AUR packages
+
+on:
+  workflow_dispatch:
+    inputs:
+      package:
+        description: "AUR package name"
+        required: true
+  push:
+    paths:
+      - '.github/workflows/arch-build-pkg.yml'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - name: Install build tools
+        run: |
+          pacman -Sy --noconfirm base-devel git sudo
+
+      - name: Create build user
+        run: |
+          useradd -m builduser
+          echo "builduser ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+          su - builduser -c "mkdir -p ~/build"
+
+      - name: Clone AUR package
+        run: |
+          su - builduser -c "cd ~/build && git clone https://aur.archlinux.org/${{ github.event.inputs.package }}.git"
+
+      - name: Build package
+        run: |
+          su - builduser -c "cd ~/build/${{ github.event.inputs.package }} && makepkg -sf --noconfirm"
+
+      - name: Upload package to repo
+        run: |
+          mkdir -p /tmp/output
+          cp /home/builduser/build/${{ github.event.inputs.package }}/*.pkg.tar.zst /tmp/output/
+
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Move packages
+        run: |
+          mkdir -p packages
+          cp /tmp/output/*.pkg.tar.zst packages/
+          repo-add packages/mynk-aur.db.tar.gz packages/*.pkg.tar.zst
+
+      - name: Commit and push
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add packages
+          git commit -m "Build ${{ github.event.inputs.package }}"
+          git push
