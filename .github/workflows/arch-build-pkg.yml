@@ -6,9 +6,9 @@ on:
       package:
         description: "AUR package name"
         required: true
-  push:
-    paths:
-      - '.github/workflows/arch-build-pkg.yml'
+  # push:
+  #   paths:
+  #     - '.github/workflows/arch-build-pkg.yml'
 
 jobs:
   build:
