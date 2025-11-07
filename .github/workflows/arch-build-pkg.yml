@@ -18,7 +18,8 @@ jobs:
     steps:
       - name: Install build tools
         run: |
-          pacman -Sy --noconfirm base-devel git sudo
+          pacman -Sy --noconfirm base-devel git sudo cmake ninja qt6-base qt6-tools qt6-declarative qt6-svg pcre2
+
 
       - name: Create build user
         run: |
@@ -47,6 +48,10 @@ jobs:
           mkdir -p packages
           cp /tmp/output/*.pkg.tar.zst packages/
           repo-add packages/mynk-aur.db.tar.gz packages/*.pkg.tar.zst
+          # 🔧 Remove symlinks and rename actual db/files
+          rm -f mynk-arch-repo.db mynk-arch-repo.files
+          mv mynk-arch-repo.db.tar.gz mynk-arch-repo.db
+          mv mynk-arch-repo.files.tar.gz mynk-arch-repo.files
 
       - name: Commit and push
         run: |
