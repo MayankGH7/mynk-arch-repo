@@ -47,11 +47,11 @@ jobs:
       - name: Move packages
         run: |
           ls /github/workspace/
-          cp /tmp/output/*.pkg.tar.zst /git/workspace/x86_64
-          repo-add /git/workspace/x86_64/mynk-arch-repo.db.tar.gz /git/workspace/x86_64/*.pkg.tar.zst
-          rm -f /git/workspace/x86_64/mynk-arch-repo.db /git/workspace/x86_64/mynk-arch-repo.files
-          mv /git/workspace/x86_64/mynk-arch-repo.db.tar.gz /git/workspace/x86_64/mynk-arch-repo.db
-          mv /git/workspace/x86_64/mynk-arch-repo.files.tar.gz /git/workspace/x86_64/mynk-arch-repo.files
+          cp /tmp/output/*.pkg.tar.zst /github/workspace/x86_64
+          repo-add /github/workspace/x86_64/mynk-arch-repo.db.tar.gz /github/workspace/x86_64/*.pkg.tar.zst
+          rm -f /github/workspace/x86_64/mynk-arch-repo.db /github/workspace/x86_64/mynk-arch-repo.files
+          mv /github/workspace/x86_64/mynk-arch-repo.db.tar.gz /github/workspace/x86_64/mynk-arch-repo.db
+          mv /github/workspace/x86_64/mynk-arch-repo.files.tar.gz /github/workspace/x86_64/mynk-arch-repo.files
 
       - name: Commit and push
         run: |
