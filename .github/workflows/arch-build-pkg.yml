@@ -47,7 +47,7 @@ jobs:
         run: |
           mkdir -p packages
           cp /tmp/output/*.pkg.tar.zst packages/
-          repo-add packages/mynk-aur.db.tar.gz packages/*.pkg.tar.zst
+          repo-add packages/mynk-arch-repo.db.tar.gz packages/*.pkg.tar.zst
           # 🔧 Remove symlinks and rename actual db/files
           rm -f packages/mynk-arch-repo.db packages/mynk-arch-repo.files
           mv packages/mynk-arch-repo.db.tar.gz packages/mynk-arch-repo.db
