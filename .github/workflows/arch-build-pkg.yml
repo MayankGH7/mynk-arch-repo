@@ -55,8 +55,9 @@ jobs:
 
       - name: Commit and push
         run: |
+          cd $GITHUB_WORKSPACE
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add packages
-          git commit -m "Build ${{ github.event.inputs.package }}"
+          git commit -m "Build ${{ github.event.inputs.package }} on $(date)" || echo "No changes to commit"
           git push
