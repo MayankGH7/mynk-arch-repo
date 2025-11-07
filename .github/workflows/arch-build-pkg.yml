@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:latest
-      options: --volume ${{ github.workspace }}:/github/workspace
+      # options: --volume ${{ github.workspace }}:/github/workspace
     steps:
       - name: Install build tools
         run: |
@@ -41,8 +41,11 @@ jobs:
           mkdir -p /tmp/output
           cp /home/builduser/build/${{ github.event.inputs.package }}/*.pkg.tar.zst /tmp/output/
 
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout repo manually
+        run: |
+          mkdir /github/workspace
+          cd /github/workspace
+          git clone https://github.com/${{ github.repository }} .
 
       - name: Move packages
         run: |
@@ -59,7 +62,7 @@ jobs:
           ls -a
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add x86_64
+          git add .
           git commit -m "Build ${{ github.event.inputs.package }} on $(date)" || echo "No changes to commit"
           git push
 
