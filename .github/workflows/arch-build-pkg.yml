@@ -48,14 +48,15 @@ jobs:
         run: |
           mkdir -p x86_64
           ls /github/workspace/
-          cp /tmp/output/*.pkg.tar.zst x86_64/
-          repo-add x86_64/mynk-arch-repo.db.tar.gz x86_64/*.pkg.tar.zst
-          rm -f x86_64/mynk-arch-repo.db x86_64/mynk-arch-repo.files
-          mv x86_64/mynk-arch-repo.db.tar.gz x86_64/mynk-arch-repo.db
-          mv x86_64/mynk-arch-repo.files.tar.gz x86_64/mynk-arch-repo.files
+          cp /tmp/output/*.pkg.tar.zst /git/workspace/
+          repo-add /git/workspace/mynk-arch-repo.db.tar.gz /git/workspace/*.pkg.tar.zst
+          rm -f /git/workspace/mynk-arch-repo.db /git/workspace/mynk-arch-repo.files
+          mv /git/workspace/mynk-arch-repo.db.tar.gz /git/workspace/mynk-arch-repo.db
+          mv /git/workspace/mynk-arch-repo.files.tar.gz /git/workspace/mynk-arch-repo.files
 
       - name: Commit and push
         run: |
+          cd /github/workspace
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           git add x86_64
