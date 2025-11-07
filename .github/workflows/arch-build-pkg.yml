@@ -10,6 +10,9 @@ on:
   #   paths:
   #     - '.github/workflows/arch-build-pkg.yml'
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
