@@ -15,6 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: archlinux:latest
+      options: --volume ${{ github.workspace }}:/github/workspace
     steps:
       - name: Install build tools
         run: |
@@ -45,19 +46,19 @@ jobs:
 
       - name: Move packages
         run: |
-          mkdir -p packages
-          cp /tmp/output/*.pkg.tar.zst packages/
-          repo-add packages/mynk-arch-repo.db.tar.gz packages/*.pkg.tar.zst
-          # 🔧 Remove symlinks and rename actual db/files
-          rm -f packages/mynk-arch-repo.db packages/mynk-arch-repo.files
-          mv packages/mynk-arch-repo.db.tar.gz packages/mynk-arch-repo.db
-          mv packages/mynk-arch-repo.files.tar.gz packages/mynk-arch-repo.files
+          mkdir -p x86_64
+          ls /github/workspace/
+          cp /tmp/output/*.pkg.tar.zst x86_64/
+          repo-add x86_64/mynk-arch-repo.db.tar.gz x86_64/*.pkg.tar.zst
+          rm -f x86_64/mynk-arch-repo.db x86_64/mynk-arch-repo.files
+          mv x86_64/mynk-arch-repo.db.tar.gz x86_64/mynk-arch-repo.db
+          mv x86_64/mynk-arch-repo.files.tar.gz x86_64/mynk-arch-repo.files
 
       - name: Commit and push
         run: |
-          cd $GITHUB_WORKSPACE
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add packages
+          git add x86_64
           git commit -m "Build ${{ github.event.inputs.package }} on $(date)" || echo "No changes to commit"
           git push
+
